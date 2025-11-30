@@ -47,7 +47,7 @@
                 <div class="d-flex align-items-center justify-content-between">
                     <div>
                         <p class="text-muted mb-1 fw-medium">Total de Impressões</p>
-                        <h3 class="mb-0 fw-bold">{{ impressoes|length|default:0 }}</h3>
+                        <h3 class="mb-0 fw-bold">{{ total_impressoes }}</h3>
                     </div>
                     <div class="stats-icon" style="background-color: #dbeafe; color: #2563eb;">
                         <i class="fas fa-file-alt"></i>
@@ -61,17 +61,7 @@
                 <div class="d-flex align-items-center justify-content-between">
                     <div>
                         <p class="text-muted mb-1 fw-medium">Pendentes</p>
-                        <h3 class="mb-0 fw-bold text-warning">
-                            {% with pendentes=impressoes|length %}
-                                {% for imp in impressoes %}
-                                    {% if not imp.entregue %}
-                                        {{ forloop.counter0|add:1 }}
-                                    {% endif %}
-                                {% empty %}
-                                    0
-                                {% endfor %}
-                            {% endwith %}
-                        </h3>
+                        <h3 class="mb-0 fw-bold text-warning">{{ total_pendentes }}</h3>
                     </div>
                     <div class="stats-icon" style="background-color: #fef3c7; color: #d97706;">
                         <i class="fas fa-clock"></i>
@@ -85,17 +75,7 @@
                 <div class="d-flex align-items-center justify-content-between">
                     <div>
                         <p class="text-muted mb-1 fw-medium">Entregues</p>
-                        <h3 class="mb-0 fw-bold text-success">
-                            {% with entregues=0 %}
-                                {% for imp in impressoes %}
-                                    {% if imp.entregue %}
-                                        {{ forloop.counter0|add:1 }}
-                                    {% endif %}
-                                {% empty %}
-                                    0
-                                {% endfor %}
-                            {% endwith %}
-                        </h3>
+                        <h3 class="mb-0 fw-bold text-success">{{ total_entregues }}</h3>
                     </div>
                     <div class="stats-icon" style="background-color: #d1fae5; color: #059669;">
                         <i class="fas fa-check-circle"></i>
@@ -116,7 +96,7 @@
                     <select name="status" class="form-select">
                         <option value="">Todos os Status</option>
                         <option value="pendente" {% if status == 'pendente' %}selected{% endif %}>Pendente</option>
-                        <option value="aprovado" {% if status == 'aprovado' %}selected{% endif %}>Aprovado</option>
+                        <option value="concluido" {% if status == 'concluido' %}selected{% endif %}>Concluído</option>
                         <option value="rejeitado" {% if status == 'rejeitado' %}selected{% endif %}>Rejeitado</option>
                     </select>
                 </div>
@@ -194,10 +174,10 @@
                         <div class="col-md-4 text-md-end mt-3 mt-md-0">
                             <div class="d-flex align-items-center justify-content-md-end">
                                 <div class="me-3">
-                                    {% if pedido.status == 'aprovado' %}
+                                    {% if pedido.status == 'concluido' %}
                                         <span class="status-badge status-entregue">
                                             <i class="fas fa-check-circle"></i>
-                                            Aprovado
+                                            Concluído
                                         </span>
                                     {% elif pedido.status == 'rejeitado' %}
                                         <span class="status-badge status-rejeitado">
@@ -211,8 +191,11 @@
                                         </span>
                                     {% endif %}
                                 </div>
-                                <a href="{% url 'detalhar_pedido' pedido.id %}" class="btn btn-outline-primary btn-sm ms-2" title="Detalhar">
+                                <a href="{% url 'detalhar_pedido_professor' pedido.id %}" class="btn btn-outline-primary btn-sm ms-2" title="Detalhar">
                                     <i class="fas fa-search"></i> Detalhar
+                                </a>
+                                <a href="{% url 'editar_pedido' pedido.id %}" class="btn btn-warning btn-sm ms-2" title="Editar">
+                                    <i class="fas fa-edit"></i> Editar
                                 </a>
                                 <form method="post" action="" style="display:inline;">
                                     {% csrf_token %}

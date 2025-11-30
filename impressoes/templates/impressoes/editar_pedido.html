@@ -1,0 +1,13 @@
+{% extends 'impressoes/base.html' %}
+{% block title %}Editar Pedido de Impressão{% endblock %}
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4">Editar Pedido de Impressão</h2>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-success">Salvar Alterações</button>
+        <a href="{% url 'painel_professor' %}" class="btn btn-secondary ms-2">Cancelar</a>
+    </form>
+</div>
+{% endblock %}

@@ -72,15 +72,7 @@
                     <div>
                         <p class="text-muted mb-1 fw-medium">Pendentes</p>
                         <h3 class="mb-0 fw-bold text-warning">
-                            {% with pendentes=0 %}
-                                {% for pedido in pedidos %}
-                                    {% if pedido.status == 'pendente' %}
-                                        {{ forloop.counter0|add:1 }}
-                                    {% endif %}
-                                {% empty %}
-                                    0
-                                {% endfor %}
-                            {% endwith %}
+                            {{ total_pendentes }}
                         </h3>
                     </div>
                     <div class="stats-icon" style="background-color: #fef3c7; color: #d97706;">
@@ -96,15 +88,7 @@
                     <div>
                         <p class="text-muted mb-1 fw-medium">Rejeitados</p>
                         <h3 class="mb-0 fw-bold text-danger">
-                            {% with rejeitados=0 %}
-                                {% for pedido in pedidos %}
-                                    {% if pedido.status == 'rejeitado' %}
-                                        {{ forloop.counter0|add:1 }}
-                                    {% endif %}
-                                {% empty %}
-                                    0
-                                {% endfor %}
-                            {% endwith %}
+                            {{ total_rejeitados }}
                         </h3>
                     </div>
                     <div class="stats-icon" style="background-color: #fee2e2; color: #dc2626;">
@@ -120,15 +104,7 @@
                     <div>
                         <p class="text-muted mb-1 fw-medium">Entregues</p>
                         <h3 class="mb-0 fw-bold text-success">
-                            {% with entregues=0 %}
-                                {% for pedido in pedidos %}
-                                    {% if pedido.status == 'aprovado' %}
-                                        {{ forloop.counter0|add:1 }}
-                                    {% endif %}
-                                {% empty %}
-                                    0
-                                {% endfor %}
-                            {% endwith %}
+                            {{ total_entregues }}
                         </h3>
                     </div>
                     <div class="stats-icon" style="background-color: #d1fae5; color: #059669;">
@@ -150,7 +126,7 @@
                     <select name="status" class="form-select">
                         <option value="">Todos os Status</option>
                         <option value="pendente" {% if status == 'pendente' %}selected{% endif %}>Pendente</option>
-                        <option value="aprovado" {% if status == 'aprovado' %}selected{% endif %}>Aprovado</option>
+                        <option value="concluido" {% if status == 'concluido' %}selected{% endif %}>Concluído</option>
                         <option value="rejeitado" {% if status == 'rejeitado' %}selected{% endif %}>Rejeitado</option>
                     </select>
                 </div>
@@ -209,7 +185,9 @@
                         <tbody>
                             {% for pedido in pedidos %}
                                 <tr>
-                                    <td class="px-4 py-3">{{ pedido.usuario.username }}</td>
+                                    <td class="px-4 py-3">
+                                        <a href="{% url 'detalhar_pedido_admin' pedido.id %}" class="fw-bold text-primary hover-underline">{{ pedido.usuario.username }}</a>
+                                    </td>
                                     <td class="px-4 py-3">
                                         {% if pedido.arquivos.all %}
                                             <ul class="mb-0" style="list-style: none; padding-left: 0;">
@@ -231,8 +209,8 @@
                                     <td class="px-4 py-3 text-center">{{ pedido.data_criacao|localtime|date:"d/m/Y H:i" }}</td>
                                     <td class="px-4 py-3 text-center">{{ pedido.observacao|default:"-" }}</td>
                                     <td class="px-4 py-3 text-center">
-                                        {% if pedido.status == 'aprovado' %}
-                                            <span class="badge bg-success">Aprovado</span>
+                                        {% if pedido.status == 'concluido' %}
+                                            <span class="badge bg-success">Concluído</span>
                                         {% elif pedido.status == 'rejeitado' %}
                                             <span class="badge bg-danger">Rejeitado</span>
                                         {% else %}

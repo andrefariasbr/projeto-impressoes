@@ -56,6 +56,26 @@ Organizar e facilitar o processo de solicitação, acompanhamento e entrega de i
    ```
 7. Acesse em [http://localhost:8000](http://localhost:8000)
 
+
+## Prints das Telas
+
+Veja abaixo algumas telas do sistema:
+
+### Tela Inicial
+![Tela Inicial](prints/tela_inicial.png)
+
+### Cadastro
+![Tela de Cadastro](prints/tela_cadastro.png)
+
+### Login
+![Tela de Login](prints/tela_login.png)
+
+### Painel do Professor
+![Painel do Professor](prints/tela_professor.png)
+
+### Painel Administrador
+![Painel Administrador](prints/tela_admin.png)
+
 ## Observações
 - O sistema já está pronto para uso local. Para produção, configure variáveis de ambiente e banco PostgreSQL.
 - O layout foi pensado para ser simples, direto e fácil de usar na rotina escolar.

@@ -5,7 +5,7 @@ from django.db import models
 class PedidoDeImpressao(models.Model):
     STATUS_CHOICES = [
         ("pendente", "Pendente"),
-        ("aprovado", "Aprovado"),
+        ("concluido", "Concluído"),
         ("rejeitado", "Rejeitado"),
     ]
     TIPO_IMPRESSAO_CHOICES = [

@@ -28,7 +28,6 @@ urlpatterns = [
     path('', index, name='index'),
     path('usuarios/', include('usuarios.urls')),
     path('impressoes/', include('impressoes.urls')),
-    path('impressoes/', include('impressoes.urls_impressora')),
 ]
 
 if settings.DEBUG:

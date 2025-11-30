@@ -13,9 +13,11 @@
         </li>
         {% endif %}
         {% if user.is_authenticated %}
+          {% if user.tipo|default:'' == 'professor' %}
           <li class="nav-item">
             <a class="nav-link" href="/impressoes/meus-envios/">Meus Pedidos</a>
           </li>
+          {% endif %}
           {% if user.is_superuser or user.tipo|default:'' == 'admin' %}
           <li class="nav-item">
             <a class="nav-link" href="/impressoes/painel-admin/">Painel Admin</a>

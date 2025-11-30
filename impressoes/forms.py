@@ -1,17 +1,22 @@
 
 from django import forms
+from .models import PedidoDeImpressao
 
-class PedidoDeImpressaoForm(forms.Form):
+
+class PedidoDeImpressaoForm(forms.ModelForm):
     arquivos = forms.FileField(
-        required=True,
-        label='Arquivo'
+        required=False,
+        label='Arquivo',
+        widget=forms.ClearableFileInput()
     )
-    quantidade_documentos = forms.IntegerField(min_value=1, label='Quantidade de documentos')
-    quantidade_folhas = forms.IntegerField(min_value=1, label='Quantidade de folhas')
-    frente_verso = forms.BooleanField(required=False, label='Impressão frente e verso')
-    grampear = forms.BooleanField(required=False, label='Grampear')
-    tipo_impressao = forms.ChoiceField(
-        choices=[('pb', 'Preto e Branco'), ('colorida', 'Colorida')],
-        label='Tipo de impressão'
-    )
-    observacao = forms.CharField(widget=forms.Textarea(attrs={'rows': 3}), required=False, label='Observação')
+
+    class Meta:
+        model = PedidoDeImpressao
+        fields = [
+            'quantidade_documentos',
+            'quantidade_folhas',
+            'frente_verso',
+            'grampear',
+            'tipo_impressao',
+            'observacao',
+        ]

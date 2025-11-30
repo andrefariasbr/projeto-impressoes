@@ -1,53 +1,25 @@
-from django.shortcuts import get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
-from .forms import UsuarioCreationForm
-from django.contrib.auth.decorators import login_required, permission_required
-# Editar usuário
-@login_required
-@permission_required('usuarios.can_manage_users', raise_exception=True)
-def editar_usuario(request, usuario_id):
-    usuario = get_object_or_404(Usuario, id=usuario_id)
-    if request.method == 'POST':
-        form = UsuarioCreationForm(request.POST, instance=usuario)
-        if form.is_valid():
-            form.save()
-            messages.success(request, 'Usuário atualizado com sucesso!')
-            return redirect(reverse('painel_usuarios'))
-    else:
-        form = UsuarioCreationForm(instance=usuario)
-    return render(request, 'usuarios/registro.html', {'form': form, 'edicao': True, 'usuario': usuario})
-
-# Excluir usuário
-@login_required
-@permission_required('usuarios.can_manage_users', raise_exception=True)
-def excluir_usuario(request, usuario_id):
-    usuario = get_object_or_404(Usuario, id=usuario_id)
-    if request.method == 'POST':
-        usuario.delete()
-        messages.success(request, 'Usuário excluído com sucesso!')
-        return redirect(reverse('painel_usuarios'))
-    return redirect(reverse('painel_usuarios'))
-
-from django.contrib.auth import authenticate, login, logout
-from django.shortcuts import render, redirect
 from django.contrib import messages
-from django.http import HttpResponse
-
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.views import LoginView
+from django.http import HttpResponse
 from django.utils.http import urlencode
 from django.conf import settings
 from django.utils.deprecation import MiddlewareMixin
-
+from django.db.models import Q
+from .forms import UsuarioCreationForm
+from .models import Usuario
 # Middleware para mensagem automática ao redirecionar para login
 class LoginRequiredMessageMiddleware(MiddlewareMixin):
     def process_request(self, request):
         if request.path == settings.LOGIN_URL and 'next' in request.GET and not request.user.is_authenticated:
-            from django.contrib import messages
             if not any(m.message == 'Você precisa estar logado para acessar esta página.' for m in messages.get_messages(request)):
                 messages.warning(request, 'Você precisa estar logado para acessar esta página.')
         return None
 
-
+# Views de autenticação
 def login_view(request):
     if request.method == 'POST':
         username = request.POST['username']
@@ -67,12 +39,24 @@ def logout_view(request):
     logout(request)
     return redirect('login')
 
+class CustomLoginView(LoginView):
+    template_name = 'usuarios/login.html'
 
+    def form_invalid(self, form):
+        messages.error(self.request, 'Usuário ou senha inválidos, ou tipo de usuário não definido.')
+        return super().form_invalid(form)
 
+    def get_success_url(self):
+        user = self.request.user
+        if hasattr(user, 'tipo') and user.tipo:
+            if user.tipo == 'professor':
+                return '/impressoes/meus-envios/'
+            elif user.tipo == 'admin':
+                return '/impressoes/painel/'
+        messages.error(self.request, 'Seu perfil não possui tipo definido. Contate o administrador.')
+        return '/usuarios/login/'
 
-from .forms import UsuarioCreationForm
-from django.contrib.auth.decorators import login_required, permission_required
-
+# Views de registro e painel de usuários
 def registro_view(request):
     if request.method == 'POST':
         form = UsuarioCreationForm(request.POST)
@@ -83,10 +67,6 @@ def registro_view(request):
     else:
         form = UsuarioCreationForm()
     return render(request, 'usuarios/registro.html', {'form': form})
-
-
-from .models import Usuario
-from django.db.models import Q
 
 @login_required
 @permission_required('usuarios.can_manage_users', raise_exception=True)
@@ -104,21 +84,27 @@ def painel_admin(request):
         usuarios = usuarios.filter(tipo=tipo)
     return render(request, 'usuarios/painel_admin.html', {'usuarios': usuarios})
 
-from django.contrib import messages
+# Views de edição e exclusão de usuário
+@login_required
+@permission_required('usuarios.can_manage_users', raise_exception=True)
+def editar_usuario(request, usuario_id):
+    usuario = get_object_or_404(Usuario, id=usuario_id)
+    if request.method == 'POST':
+        form = UsuarioCreationForm(request.POST, instance=usuario)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Usuário atualizado com sucesso!')
+            return redirect(reverse('painel_usuarios'))
+    else:
+        form = UsuarioCreationForm(instance=usuario)
+    return render(request, 'usuarios/registro.html', {'form': form, 'edicao': True, 'usuario': usuario})
 
-class CustomLoginView(LoginView):
-    template_name = 'usuarios/login.html'
-
-    def form_invalid(self, form):
-        messages.error(self.request, 'Usuário ou senha inválidos, ou tipo de usuário não definido.')
-        return super().form_invalid(form)
-
-    def get_success_url(self):
-        user = self.request.user
-        if hasattr(user, 'tipo') and user.tipo:
-            if user.tipo == 'professor':
-                return '/impressoes/meus-envios/'
-            elif user.tipo == 'admin':
-                return '/impressoes/painel/'
-        messages.error(self.request, 'Seu perfil não possui tipo definido. Contate o administrador.')
-        return '/usuarios/login/'
+@login_required
+@permission_required('usuarios.can_manage_users', raise_exception=True)
+def excluir_usuario(request, usuario_id):
+    usuario = get_object_or_404(Usuario, id=usuario_id)
+    if request.method == 'POST':
+        usuario.delete()
+        messages.success(request, 'Usuário excluído com sucesso!')
+        return redirect(reverse('painel_usuarios'))
+    return redirect(reverse('painel_usuarios'))
