@@ -1,0 +1,22 @@
+name: Test Python Code
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    needs: lint
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      - name: Install test dependencies
+        run: pip install pytest pytest-django django psycopg2-binary
+      - name: Run Pytest
+        run: pytest

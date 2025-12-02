@@ -1,0 +1,31 @@
+[project]
+name = "projeto_impressoes"
+version = "1.0.0"
+description = "Sistema de Impressões Acadêmicas em Django"
+authors = [
+    { name = "André Ferreira Farias" },
+    { name = "Larisse Pessoa Reis" }
+]
+readme = "README.md"
+requires-python = ">=3.11"
+
+[project.optional-dependencies]
+dev = [
+    "black",
+    "flake8"
+]
+test = [
+    "pytest",
+    "pytest-django"
+]
+prod = [
+    "django",
+    "psycopg2-binary"
+]
+
+[tool.black]
+line-length = 88
+
+[tool.flake8]
+max-line-length = 88
+exclude = ["venv", "migrations", "__pycache__"]
