@@ -10,7 +10,15 @@ urlpatterns = [
     path("login/", CustomLoginView.as_view(), name="login"),
     path("registro/", registro_view, name="registro"),
     path("painel_usuarios/", painel_admin, name="painel_usuarios"),
-    path("editar/<int:usuario_id>/", views.editar_usuario, name="editar_usuario"),
-    path("excluir/<int:usuario_id>/", views.excluir_usuario, name="excluir_usuario"),
+    path(
+        "editar/<int:usuario_id>/",
+        views.editar_usuario,
+        name="editar_usuario",
+    ),
+    path(
+        "excluir/<int:usuario_id>/",
+        views.excluir_usuario,
+        name="excluir_usuario",
+    ),
     path("logout/", logout_view, name="logout"),
 ]

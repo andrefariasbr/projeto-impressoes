@@ -10,12 +10,16 @@ from .forms import PedidoDeImpressaoForm
 # View para editar pedido de impressão
 @login_required
 def editar_pedido(request, pedido_id):
-    pedido = get_object_or_404(PedidoDeImpressao, id=pedido_id, usuario=request.user)
+    pedido = get_object_or_404(
+        PedidoDeImpressao, id=pedido_id, usuario=request.user
+    )
     if pedido.status != "pendente":
         messages.error(request, "Só é possível editar pedidos pendentes.")
         return redirect("painel_professor")
     if request.method == "POST":
-        form = PedidoDeImpressaoForm(request.POST, request.FILES, instance=pedido)
+        form = PedidoDeImpressaoForm(
+            request.POST, request.FILES, instance=pedido
+        )
         if form.is_valid():
             form.save()
             # Atualizar arquivos se enviados
@@ -29,13 +33,17 @@ def editar_pedido(request, pedido_id):
     else:
         form = PedidoDeImpressaoForm(instance=pedido)
     return render(
-        request, "impressoes/editar_pedido.html", {"form": form, "pedido": pedido}
+        request,
+        "impressoes/editar_pedido.html",
+        {"form": form, "pedido": pedido},
     )
 
 
 # Função para verificar se o usuário é admin
 def is_admin(user):
-    return user.is_authenticated and (hasattr(user, "tipo") and user.tipo == "admin")
+    return user.is_authenticated and (
+        hasattr(user, "tipo") and user.tipo == "admin"
+    )
 
 
 # Detalhar pedido para administrador (com ações)
@@ -57,21 +65,25 @@ def detalhar_pedido_admin(request, pedido_id):
             messages.success(request, "Pedido excluído!")
             return redirect("painel_admin")
         return redirect("detalhar_pedido_admin", pedido_id=pedido.id)
-    return render(request, "impressoes/detalhar_pedido_admin.html", {"pedido": pedido})
+    return render(
+        request, "impressoes/detalhar_pedido_admin.html", {"pedido": pedido}
+    )
 
 
 # Detalhar pedido para professor (apenas visualização)
 @login_required
 def detalhar_pedido_professor(request, pedido_id):
-    pedido = get_object_or_404(PedidoDeImpressao, id=pedido_id, usuario=request.user)
+    pedido = get_object_or_404(
+        PedidoDeImpressao, id=pedido_id, usuario=request.user
+    )
     return render(
-        request, "impressoes/detalhar_pedido_professor.html", {"pedido": pedido}
+        request,
+        "impressoes/detalhar_pedido_professor.html",
+        {"pedido": pedido},
     )
 
 
-from django.contrib.auth.decorators import user_passes_test
-from django.core.paginator import Paginator
-from django.db.models import Q
+
 
 
 @login_required
@@ -82,7 +94,9 @@ def criar_pedido(request):
             pedido = PedidoDeImpressao.objects.create(
                 usuario=request.user,
                 observacao=form.cleaned_data["observacao"],
-                quantidade_documentos=form.cleaned_data["quantidade_documentos"],
+                quantidade_documentos=form.cleaned_data[
+                    "quantidade_documentos"
+                ],
                 quantidade_folhas=form.cleaned_data["quantidade_folhas"],
                 frente_verso=form.cleaned_data["frente_verso"],
                 grampear=form.cleaned_data["grampear"],
@@ -91,7 +105,9 @@ def criar_pedido(request):
             arquivos = request.FILES.getlist("arquivos")
             for arq in arquivos:
                 ArquivoPedido.objects.create(pedido=pedido, arquivo=arq)
-            messages.success(request, "Pedido de impressão enviado com sucesso!")
+            messages.success(
+                request, "Pedido de impressão enviado com sucesso!"
+            )
             return redirect("painel_professor")
         else:
             messages.error(
@@ -103,7 +119,9 @@ def criar_pedido(request):
 
 
 def is_admin(user):
-    return user.is_authenticated and (hasattr(user, "tipo") and user.tipo == "admin")
+    return user.is_authenticated and (
+        hasattr(user, "tipo") and user.tipo == "admin"
+    )
 
 
 @login_required
@@ -126,9 +144,15 @@ def painel_admin(request):
     page_obj = paginator.get_page(page_number)
 
     # Contagem dos pedidos por status
-    total_pendentes = PedidoDeImpressao.objects.filter(status="pendente").count()
-    total_rejeitados = PedidoDeImpressao.objects.filter(status="rejeitado").count()
-    total_entregues = PedidoDeImpressao.objects.filter(status="concluido").count()
+    total_pendentes = PedidoDeImpressao.objects.filter(
+        status="pendente"
+    ).count()
+    total_rejeitados = PedidoDeImpressao.objects.filter(
+        status="rejeitado"
+    ).count()
+    total_entregues = PedidoDeImpressao.objects.filter(
+        status="concluido"
+    ).count()
 
     if request.method == "POST":
         acao = request.POST.get("acao")
@@ -181,7 +205,9 @@ def painel_professor(request):
     page_obj = paginator.get_page(page_number)
 
     # Contadores para o painel do professor
-    total_impressoes = PedidoDeImpressao.objects.filter(usuario=request.user).count()
+    total_impressoes = PedidoDeImpressao.objects.filter(
+        usuario=request.user
+    ).count()
     total_pendentes = PedidoDeImpressao.objects.filter(
         usuario=request.user, status="pendente"
     ).count()
@@ -192,7 +218,9 @@ def painel_professor(request):
     if request.method == "POST":
         acao = request.POST.get("acao")
         pedido_id = request.POST.get("pedido_id")
-        pedido = PedidoDeImpressao.objects.get(id=pedido_id, usuario=request.user)
+        pedido = PedidoDeImpressao.objects.get(
+            id=pedido_id, usuario=request.user
+        )
         if acao == "excluir":
             pedido.delete()
             messages.success(request, "Pedido excluído!")

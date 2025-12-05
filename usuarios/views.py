@@ -4,8 +4,6 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.views import LoginView
-from django.http import HttpResponse
-from django.utils.http import urlencode
 from django.conf import settings
 from django.utils.deprecation import MiddlewareMixin
 from django.db.models import Q
@@ -22,11 +20,13 @@ class LoginRequiredMessageMiddleware(MiddlewareMixin):
             and not request.user.is_authenticated
         ):
             if not any(
-                m.message == "Você precisa estar logado para acessar esta página."
+                m.message
+                == "Você precisa estar logado para acessar esta página."
                 for m in messages.get_messages(request)
             ):
                 messages.warning(
-                    request, "Você precisa estar logado para acessar esta página."
+                    request,
+                    "Você precisa estar logado para acessar esta página.",
                 )
         return None
 
@@ -58,7 +58,8 @@ class CustomLoginView(LoginView):
 
     def form_invalid(self, form):
         messages.error(
-            self.request, "Usuário ou senha inválidos, ou tipo de usuário não definido."
+            self.request,
+            "Usuário ou senha inválidos, ou tipo de usuário não definido.",
         )
         return super().form_invalid(form)
 
@@ -103,7 +104,9 @@ def painel_admin(request):
         )
     if tipo:
         usuarios = usuarios.filter(tipo=tipo)
-    return render(request, "usuarios/painel_admin.html", {"usuarios": usuarios})
+    return render(
+        request, "usuarios/painel_admin.html", {"usuarios": usuarios}
+    )
 
 
 # Views de edição e exclusão de usuário

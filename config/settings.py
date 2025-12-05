@@ -4,7 +4,9 @@ from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent.parent
 MEDIA_URL = "/uploads/"
 MEDIA_ROOT = BASE_DIR / "uploads"
-SECRET_KEY = "django-insecure-r(gte_yy)_#sz4+!)81vyr0)ekie*2uirkd38w+zgkg1nbedm*"
+SECRET_KEY = (
+    "django-insecure-r(gte_yy)_#sz4+!)81vyr0)ekie*2uirkd38w+zgkg1nbedm*"
+)
 DEBUG = True
 ALLOWED_HOSTS = []
 INSTALLED_APPS = [

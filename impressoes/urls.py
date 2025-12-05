@@ -16,5 +16,9 @@ urlpatterns = [
         views.detalhar_pedido_professor,
         name="detalhar_pedido_professor",
     ),
-    path("pedido/<int:pedido_id>/editar/", views.editar_pedido, name="editar_pedido"),
+    path(
+        "pedido/<int:pedido_id>/editar/",
+        views.editar_pedido,
+        name="editar_pedido",
+    ),
 ]

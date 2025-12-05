@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.db import models
+from usuarios.models import Usuario
 
 
 class PedidoDeImpressao(models.Model):
@@ -14,9 +15,13 @@ class PedidoDeImpressao(models.Model):
     ]
 
     usuario = models.ForeignKey(
-        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="pedidos"
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="pedidos",
     )
-    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default="pendente")
+    status = models.CharField(
+        max_length=10, choices=STATUS_CHOICES, default="pendente"
+    )
     data_criacao = models.DateTimeField(auto_now_add=True)
     observacao = models.TextField(blank=True)
     quantidade_documentos = models.PositiveIntegerField(default=1)
@@ -41,8 +46,6 @@ class ArquivoPedido(models.Model):
         return f"Arquivo de {self.pedido.usuario.username} - Pedido {self.pedido.id}"
 
 
-from django.db import models
-from usuarios.models import Usuario
 
 
 class Impressao(models.Model):
@@ -56,7 +59,9 @@ class Impressao(models.Model):
     quantidade_folhas = models.PositiveIntegerField()
     frente_verso = models.BooleanField(default=False)
     grampear = models.BooleanField(default=False)
-    tipo_impressao = models.CharField(max_length=20, choices=TIPO_IMPRESSAO_CHOICES)
+    tipo_impressao = models.CharField(
+        max_length=20, choices=TIPO_IMPRESSAO_CHOICES
+    )
     criado_em = models.DateTimeField(auto_now_add=True)
 
     entregue = models.BooleanField(default=False)
