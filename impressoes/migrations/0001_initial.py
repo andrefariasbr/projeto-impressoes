@@ -15,19 +15,39 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='Impressao',
+            name="Impressao",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('arquivo', models.FileField(upload_to='impressoes/')),
-                ('quantidade_folhas', models.PositiveIntegerField()),
-                ('frente_verso', models.BooleanField(default=False)),
-                ('grampear', models.BooleanField(default=False)),
-                ('tipo_impressao', models.CharField(choices=[('pb', 'Preto e Branco'), ('colorida', 'Colorida')], max_length=20)),
-                ('criado_em', models.DateTimeField(auto_now_add=True)),
-                ('entregue', models.BooleanField(default=False)),
-                ('grampeado', models.BooleanField(default=False)),
-                ('envelopado', models.BooleanField(default=False)),
-                ('usuario', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("arquivo", models.FileField(upload_to="impressoes/")),
+                ("quantidade_folhas", models.PositiveIntegerField()),
+                ("frente_verso", models.BooleanField(default=False)),
+                ("grampear", models.BooleanField(default=False)),
+                (
+                    "tipo_impressao",
+                    models.CharField(
+                        choices=[("pb", "Preto e Branco"), ("colorida", "Colorida")],
+                        max_length=20,
+                    ),
+                ),
+                ("criado_em", models.DateTimeField(auto_now_add=True)),
+                ("entregue", models.BooleanField(default=False)),
+                ("grampeado", models.BooleanField(default=False)),
+                ("envelopado", models.BooleanField(default=False)),
+                (
+                    "usuario",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
         ),
     ]

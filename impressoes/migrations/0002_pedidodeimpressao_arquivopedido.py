@@ -8,32 +8,80 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('impressoes', '0001_initial'),
+        ("impressoes", "0001_initial"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='PedidoDeImpressao',
+            name="PedidoDeImpressao",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('status', models.CharField(choices=[('pendente', 'Pendente'), ('aprovado', 'Aprovado'), ('rejeitado', 'Rejeitado')], default='pendente', max_length=10)),
-                ('data_criacao', models.DateTimeField(auto_now_add=True)),
-                ('observacao', models.TextField(blank=True)),
-                ('quantidade_documentos', models.PositiveIntegerField(default=1)),
-                ('quantidade_folhas', models.PositiveIntegerField(default=1)),
-                ('frente_verso', models.BooleanField(default=False)),
-                ('grampear', models.BooleanField(default=False)),
-                ('tipo_impressao', models.CharField(choices=[('pb', 'Preto e Branco'), ('colorida', 'Colorida')], default='pb', max_length=20)),
-                ('usuario', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='pedidos', to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "status",
+                    models.CharField(
+                        choices=[
+                            ("pendente", "Pendente"),
+                            ("aprovado", "Aprovado"),
+                            ("rejeitado", "Rejeitado"),
+                        ],
+                        default="pendente",
+                        max_length=10,
+                    ),
+                ),
+                ("data_criacao", models.DateTimeField(auto_now_add=True)),
+                ("observacao", models.TextField(blank=True)),
+                ("quantidade_documentos", models.PositiveIntegerField(default=1)),
+                ("quantidade_folhas", models.PositiveIntegerField(default=1)),
+                ("frente_verso", models.BooleanField(default=False)),
+                ("grampear", models.BooleanField(default=False)),
+                (
+                    "tipo_impressao",
+                    models.CharField(
+                        choices=[("pb", "Preto e Branco"), ("colorida", "Colorida")],
+                        default="pb",
+                        max_length=20,
+                    ),
+                ),
+                (
+                    "usuario",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="pedidos",
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='ArquivoPedido',
+            name="ArquivoPedido",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('arquivo', models.FileField(upload_to='impressao/')),
-                ('pedido', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='arquivos', to='impressoes.pedidodeimpressao')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("arquivo", models.FileField(upload_to="impressao/")),
+                (
+                    "pedido",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="arquivos",
+                        to="impressoes.pedidodeimpressao",
+                    ),
+                ),
             ],
         ),
     ]

@@ -1,10 +1,11 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
+
 class Usuario(AbstractUser):
     TIPOS = (
-        ('professor', 'Professor'),
-        ('admin', 'Administrador'),
+        ("professor", "Professor"),
+        ("admin", "Administrador"),
     )
     tipo = models.CharField(max_length=20, choices=TIPOS)
     cpf = models.CharField(max_length=14, unique=True, null=True, blank=True)
