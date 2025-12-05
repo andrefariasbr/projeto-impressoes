@@ -20,8 +20,7 @@ class LoginRequiredMessageMiddleware(MiddlewareMixin):
             and not request.user.is_authenticated
         ):
             if not any(
-                m.message
-                == "Você precisa estar logado para acessar esta página."
+                m.message == "Você precisa estar logado para acessar esta página."
                 for m in messages.get_messages(request)
             ):
                 messages.warning(
@@ -104,9 +103,7 @@ def painel_admin(request):
         )
     if tipo:
         usuarios = usuarios.filter(tipo=tipo)
-    return render(
-        request, "usuarios/painel_admin.html", {"usuarios": usuarios}
-    )
+    return render(request, "usuarios/painel_admin.html", {"usuarios": usuarios})
 
 
 # Views de edição e exclusão de usuário

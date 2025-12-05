@@ -19,9 +19,7 @@ class PedidoDeImpressao(models.Model):
         on_delete=models.CASCADE,
         related_name="pedidos",
     )
-    status = models.CharField(
-        max_length=10, choices=STATUS_CHOICES, default="pendente"
-    )
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default="pendente")
     data_criacao = models.DateTimeField(auto_now_add=True)
     observacao = models.TextField(blank=True)
     quantidade_documentos = models.PositiveIntegerField(default=1)
@@ -35,7 +33,8 @@ class PedidoDeImpressao(models.Model):
     def __str__(self):
         return f"{self.usuario.username} - Pedido {self.id} ({self.status})"
 
-#teste
+
+# teste
 class ArquivoPedido(models.Model):
     pedido = models.ForeignKey(
         PedidoDeImpressao, on_delete=models.CASCADE, related_name="arquivos"
@@ -57,9 +56,7 @@ class Impressao(models.Model):
     quantidade_folhas = models.PositiveIntegerField()
     frente_verso = models.BooleanField(default=False)
     grampear = models.BooleanField(default=False)
-    tipo_impressao = models.CharField(
-        max_length=20, choices=TIPO_IMPRESSAO_CHOICES
-    )
+    tipo_impressao = models.CharField(max_length=20, choices=TIPO_IMPRESSAO_CHOICES)
     criado_em = models.DateTimeField(auto_now_add=True)
 
     entregue = models.BooleanField(default=False)
