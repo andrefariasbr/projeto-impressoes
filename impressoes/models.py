@@ -35,7 +35,7 @@ class PedidoDeImpressao(models.Model):
     def __str__(self):
         return f"{self.usuario.username} - Pedido {self.id} ({self.status})"
 
-
+#teste
 class ArquivoPedido(models.Model):
     pedido = models.ForeignKey(
         PedidoDeImpressao, on_delete=models.CASCADE, related_name="arquivos"
