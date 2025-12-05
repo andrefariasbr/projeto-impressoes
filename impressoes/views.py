@@ -110,8 +110,8 @@ def painel_admin(request):
     if status:
         pedidos = pedidos.filter(status=status)
     if busca:
-        pedidos = pedidos.filter(Q(usuario__username__icontains=busca) | Q(arquivo__icontains=busca))
-    paginator = Paginator(pedidos, 10)
+           pedidos = pedidos.filter(Q(usuario__username__icontains=busca) | Q(arquivos__arquivo__icontains=busca))
+    paginator = Paginator(pedidos, 2)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
