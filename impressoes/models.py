@@ -46,8 +46,6 @@ class ArquivoPedido(models.Model):
         return f"Arquivo de {self.pedido.usuario.username} - Pedido {self.pedido.id}"
 
 
-
-
 class Impressao(models.Model):
     TIPO_IMPRESSAO_CHOICES = [
         ("pb", "Preto e Branco"),

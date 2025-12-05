@@ -83,9 +83,6 @@ def detalhar_pedido_professor(request, pedido_id):
     )
 
 
-
-
-
 @login_required
 def criar_pedido(request):
     if request.method == "POST":
